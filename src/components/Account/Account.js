@@ -8,8 +8,10 @@ import {
 	Input,
 	message
 } from 'antd'
+import {
+	Link
+} from 'react-router'
 import ModifyPass from './ModifyPass'
-import CreateUser from './CreateUser'
 import config from '../../config'
 import './Account.scss'
 const confirm = Modal.confirm
@@ -19,123 +21,79 @@ export default class AccountComponent extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: []
-				// key: '1',
-				// userName: 'admin',
-				// password: 'admin',
-				// role: '超级管理员'
+			data: {}
 		}
 	}
-	delete(key, e) {
-		e.preventDefault();
-		e.stopPropagation();
-		let reGetUsers = this.getUsers;
-		console.log(reGetUsers);
-		confirm({
-			title: '确定要删除吗?',
-			content: '删除的账号将无法登陆',
-			onOk() {
-				let bodyquery = 'id=' + key;
-				console.log(bodyquery);
-				fetch(config.api + '/deleteUser', {
-					method: 'post',
-					mode: 'cors',
-					body: bodyquery,
-					headers: {
-						"Content-Type": "application/x-www-form-urlencoded"
-					}
-				}).then((res) => {
-					return res.json();
-				}).then((data) => {
-					if (data.status == 200) {
-						message.success(data.message);
-						reGetUsers();
-					} else {
-						message.error(data.message);
-					}
-				}).catch(err => console.log(err))
-			},
-			onCancel() {}
-		});
-	}
-	test = () => {
-		alert('success');
-	}
-	getUsers = () => {
-		fetch(config.api + '/getUsers', {
-			method: 'get',
+	getData = () => {
+		let bodyquery = 'userName=' + sessionStorage.userName + '&role_id=' + sessionStorage.role_id;
+		fetch(config.api + '/User/getUserInfo', {
+			method: 'post',
 			mode: 'cors',
+			body: bodyquery,
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
-			}
+			},
 		}).then((res) => {
 			return res.json();
 		}).then((data) => {
 			if (data.status == 200) {
 				this.setState({
-					data: data.users
-				});
-			} else {
-				message.error(data.message);
+					data: data
+				})
 			}
 		}).catch(err => console.log(err))
 	}
-	componentDidMount() {
-		this.getUsers();
+	componentWillMount() {
+		this.getData();
 	}
 	render() {
-		const columns = [{
-			title: '用户名',
-			dataIndex: 'userName',
-			key: 'userName',
-		}, {
-			title: '密码',
-			dataIndex: 'password',
-			key: 'password',
-		}, {
-			title: '权限',
-			dataIndex: 'role',
-			key: 'role',
-		}, {
-			title: '操作',
-			key: 'action',
-			render: (text, record) => {
-				if (this.state.data.length == 1) {
-					return (
-						<span>
-							<Button type="danger" onClick={this.delete.bind(this,record.key)} disabled>
-								删除
-							</Button>
-						</span>
-					)
-				} else {
-					return (
-						<span>
-							<Button type="danger" onClick={this.delete.bind(this,record.key)}>
-								删除
-							</Button>
-						</span>
-					)
-				}
-			},
-		}];
-		// const data = [{
-		// 	key: '1',
-		// 	userName: 'admin',
-		// 	password: 'admin',
-		// 	role: '超级管理员'
-		// }]
-		let data = this.state.data;
+		let name = this.state.data.name ? '姓名：' + this.state.data.name : '';
+		name = (<span>{name}</span>);
+		let userInfo;
+		if (sessionStorage.role_id == 2 || sessionStorage.role_id == 3) {
+			userInfo = (
+				<div className='user-info'>
+					<p><span className='tip'>姓名：</span><span>{this.state.data.name}</span></p>
+					<p><span className='tip'>校园卡号：</span><span>{this.state.data.card_number}</span></p>
+					<p><span className='tip'>办公室：</span><span>{this.state.data.office}</span></p>
+					<p><span className='tip'>办公电话：</span><span>{this.state.data.telephone}</span></p>
+					<p><span className='tip'>手机：</span><span>{this.state.data.phone}</span></p>
+					<p><span className='tip'>短号：</span><span>{this.state.data.short_phone}</span></p>
+					<p><span className='tip'>邮箱：</span><span>{this.state.data.email}</span></p>
+					<p><span className='tip'>QQ：</span><span>{this.state.data.qq}</span></p>
+					<p><span className='tip'>微信：</span><span>{this.state.data.wechat}</span></p>
+					<Button type='primary' className='modify-button'><Link to='/userModify'>修改个人信息</Link></Button>
+				</div>
+			);
+		} else if (sessionStorage.role_id == 4) {
+			userInfo = (
+				<div className='user-info'>
+					<p><span className='tip'>姓名：</span><span>{this.state.data.name}</span></p>
+					<p><span className='tip'>学号：</span><span>{this.state.data.card_number}</span></p>
+					<p><span className='tip'>班级：</span><span>{this.state.data.class}</span></p>
+					<p><span className='tip'>专业：</span><span>{this.state.data.major}</span></p>
+					<p><span className='tip'>宿舍：</span><span>{this.state.data.dorm}</span></p>
+					<p><span className='tip'>身份证：</span><span>{this.state.data.identity_card}</span></p>
+					<p><span className='tip'>手机：</span><span>{this.state.data.phone}</span></p>
+					<p><span className='tip'>短号：</span><span>{this.state.data.short_phone}</span></p>					
+					<p><span className='tip'>邮箱：</span><span>{this.state.data.email}</span></p>
+					<p><span className='tip'>QQ：</span><span>{this.state.data.qq}</span></p>
+					<p><span className='tip'>微信：</span><span>{this.state.data.wechat}</span></p>
+					<Button type='primary' className='modify-button'><Link to='/userModify'>修改个人信息</Link></Button>
+				</div>
+			);
+		}
 		return (
 			<div>
 				<div className='account-top'>
-					<span>当前账户:{sessionStorage.userName}</span>
+					<span>当前账户：{sessionStorage.userName}</span>
+					{name}
+					<span>上次登陆：{this.state.data.time}</span>
+					<span>IP：{this.state.data.ip}</span>
 					<ModifyPass />				
 				</div>
-				<CreateUser getUsers = {this.getUsers}/>
-				<Table className="table" columns={columns} dataSource={data} />
+				{userInfo}
 			</div>
-
 		)
 	}
 }

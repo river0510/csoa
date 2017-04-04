@@ -38,7 +38,7 @@ class Login extends React.Component {
 					if (data.status == 200) {
 						message.success(data.message);
 						sessionStorage.userName = data.userName;
-						sessionStorage.role = data.role;
+						sessionStorage.role_id = data.role_id;
 						sessionStorage.id = data.id;
 						this.context.router.push('/');
 					} else {

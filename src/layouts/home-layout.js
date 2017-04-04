@@ -12,7 +12,7 @@ class HomeLayout extends React.Component {
 		}
 	}
 	getRole = () => {
-		let bodyquery = "role=" + sessionStorage.role;
+		let bodyquery = "role_id=" + sessionStorage.role_id;
 		fetch(config.api + '/User/getRole', {
 			method: 'post',
 			mode: 'cors',

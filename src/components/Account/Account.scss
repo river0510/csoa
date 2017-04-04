@@ -1,11 +1,32 @@
 .account-top{
 	height: 50px;
 	line-height: 50px;
+	border-bottom: solid 1px #ccc;
+	span{
+		margin: 0 5px;
+		font-size: 14px;
+	}
 	.modifyPass{
 		display: inline-block;
-		margin-left: 20px;
+		float: right;
 	}
 }
-.createUser{
-	margin-bottom: 20px;
+.user-info{
+	padding-top: 30px;
+	padding-left: 50px;
+	font-size: 18px;
+	width: 500px;
+	p{
+		height: 30px;
+		line-height: 30px;
+		margin: 10px 0;
+		.tip{
+			width: 100px;
+			display: inline-block;
+		}
+	}
+}
+.modify-button{
+	margin: 30px 50px;
+	display: block;
 }

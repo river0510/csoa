@@ -25,8 +25,8 @@ class ModifyPass extends React.Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				let bodyquery = "id=" + sessionStorage.id + "&password=" + values.password;
-				fetch(config.api + '/modifyPass', {
+				let bodyquery = "userName=" + sessionStorage.userName + "&password=" + values.password + "&role_id=" + sessionStorage.role_id;
+				fetch(config.api + '/User/modifyPass', {
 					method: 'post',
 					mode: 'cors',
 					body: bodyquery,
@@ -64,7 +64,7 @@ class ModifyPass extends React.Component {
 		          help={passwordError || ''}
 		        >
 		          {getFieldDecorator('password', {
-		            rules: [{ required: true, message: '请输入新的密码' }],
+		            rules: [{ required: true, message: ' ' }],
 		          })(
 		            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="请输入新的密码" />
 		          )}
