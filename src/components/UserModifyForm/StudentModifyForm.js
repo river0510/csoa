@@ -9,70 +9,80 @@ import {
   Row,
   Col,
   Checkbox,
-  Button
+  Button,
+  message
 } from 'antd';
+import config from '../../config'
+import './UserModifyForm.scss'
 const FormItem = Form.Item;
-const Option = Select.Option;
 
-const residences = [{
-  value: 'zhejiang',
-  label: 'Zhejiang',
-  children: [{
-    value: 'hangzhou',
-    label: 'Hangzhou',
-    children: [{
-      value: 'xihu',
-      label: 'West Lake',
-    }],
-  }],
-}, {
-  value: 'jiangsu',
-  label: 'Jiangsu',
-  children: [{
-    value: 'nanjing',
-    label: 'Nanjing',
-    children: [{
-      value: 'zhonghuamen',
-      label: 'Zhong Hua Men',
-    }],
-  }],
-}];
 
 class StudentModifyForm extends React.Component {
   state = {
-    confirmDirty: false,
-  };
+    data: {}
+  }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        let bodyquery =
+          'card_number=' + this.props.userName +
+          '&role_id=' + this.props.role_id +
+          '&class=' + values.class +
+          '&major=' + values.major +
+          '&dorm=' + values.dorm +
+          '&identity_card=' + values.identity_card +
+          '&phone=' + values.phone +
+          '&short_phone=' + values.short_phone +
+          '&email=' + values.email +
+          '&qq=' + values.qq +
+          '&wechat=' + values.wechat;
+        console.log(bodyquery);
+        fetch(config.api + '/User/userModify', {
+          method: 'post',
+          mode: 'cors',
+          body: bodyquery,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+        }).then((res) => {
+          return res.json();
+        }).then((data) => {
+          if (data.status == 200) {
+            message.success(data.message);
+            window.history.back();
+            location.reload();
+          } else {
+            message.error(data.message);
+          }
+        }).catch(err => console.log(err))
       }
     });
   }
-  handleConfirmBlur = (e) => {
-    const value = e.target.value;
-    this.setState({
-      confirmDirty: this.state.confirmDirty || !!value
-    });
+  getUserInfo = () => {
+    let bodyquery = 'userName=' + this.props.userName + '&role_id=' + this.props.role_id;
+    fetch(config.api + '/User/getUserInfo', {
+      method: 'post',
+      mode: 'cors',
+      body: bodyquery,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      if (data.status == 200) {
+        this.setState({
+          data: data
+        })
+      }
+    }).catch(err => console.log(err))
   }
-  checkPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
+
+  componentDidMount() {
+    this.getUserInfo();
   }
-  checkConfirm = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], {
-        force: true
-      });
-    }
-    callback();
-  }
+
   render() {
     const {
       getFieldDecorator
@@ -107,132 +117,121 @@ class StudentModifyForm extends React.Component {
         },
       },
     };
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86',
-    })(
-      <Select className="icp-selector">
-        <Option value="86">+86</Option>
-      </Select>
-    );
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit} className='user-modify'>
+        <FormItem
+          {...formItemLayout}
+          label="班级"
+        >
+          {getFieldDecorator('class', {
+            rules: [{ required: true, message: '请输入你的班级' }],
+            initialValue: this.state.data.class
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="专业"
+        >
+          {getFieldDecorator('major', {
+            rules: [{ required: true, message: '请输入你的专业' }],
+            initialValue: this.state.data.major
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="宿舍"
+        >
+          {getFieldDecorator('dorm', {
+            rules: [{ required: true, message: '请输入你的宿舍' }],
+            initialValue: this.state.data.dorm
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="身份证"
+        >
+          {getFieldDecorator('identity_card', {
+            rules: [{ required: true, message: '请输入你的身份证号' }],
+            initialValue: this.state.data.identity_card
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="手机"
+        >
+          {getFieldDecorator('phone', {
+            rules: [{ required: true, message: '请输入你的手机号' }],
+            initialValue: this.state.data.phone
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="短号"
+        >
+          {getFieldDecorator('short_phone', {
+            rules: [{ required: true, message: '请输入你的短号，没有则填写‘无’' }],
+            initialValue: this.state.data.short_phone
+          })(
+            <Input />
+          )}
+        </FormItem>
         <FormItem
           {...formItemLayout}
           label="E-mail"
-          hasFeedback
         >
           {getFieldDecorator('email', {
             rules: [{
-              type: 'email', message: 'The input is not valid E-mail!',
+              type: 'email', message: '老铁，你邮箱能不能正常点？',
             }, {
-              required: true, message: 'Please input your E-mail!',
+              required: true, message: '请输入你的邮箱',
             }],
+            initialValue: this.state.data.email
           })(
             <Input />
           )}
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="Password"
-          hasFeedback
+          label="QQ"
         >
-          {getFieldDecorator('password', {
-            rules: [{
-              required: true, message: 'Please input your password!',
-            }, {
-              validator: this.checkConfirm,
-            }],
-          })(
-            <Input type="password" />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Confirm Password"
-          hasFeedback
-        >
-          {getFieldDecorator('confirm', {
-            rules: [{
-              required: true, message: 'Please confirm your password!',
-            }, {
-              validator: this.checkPassword,
-            }],
-          })(
-            <Input type="password" onBlur={this.handleConfirmBlur} />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={(
-            <span>
-              Nickname&nbsp;
-              <Tooltip title="What do you want other to call you?">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
-          )}
-          hasFeedback
-        >
-          {getFieldDecorator('nickname', {
-            rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+          {getFieldDecorator('qq', {
+            rules: [{ required: true, message: '请输入你的QQ' }],
+            initialValue: this.state.data.qq
           })(
             <Input />
           )}
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="Habitual Residence"
+          label="微信"
         >
-          {getFieldDecorator('residence', {
-            initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-            rules: [{ type: 'array', required: true, message: 'Please select your habitual residence!' }],
+          {getFieldDecorator('wechat', {
+            rules: [{ required: true, message: '请输入你的微信' }],
+            initialValue: this.state.data.wechat
           })(
-            <Cascader options={residences} />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Phone Number"
-        >
-          {getFieldDecorator('phone', {
-            rules: [{ required: true, message: 'Please input your phone number!' }],
-          })(
-            <Input addonBefore={prefixSelector} />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Captcha"
-          extra="We must make sure that your are a human."
-        >
-          <Row gutter={8}>
-            <Col span={12}>
-              {getFieldDecorator('captcha', {
-                rules: [{ required: true, message: 'Please input the captcha you got!' }],
-              })(
-                <Input size="large" />
-              )}
-            </Col>
-            <Col span={12}>
-              <Button size="large">Get captcha</Button>
-            </Col>
-          </Row>
-        </FormItem>
-        <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
-          {getFieldDecorator('agreement', {
-            valuePropName: 'checked',
-          })(
-            <Checkbox>I have read the <a>agreement</a></Checkbox>
+            <Input />
           )}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large">Register</Button>
+          <Button type="primary" htmlType="submit" size="large">修改</Button>
         </FormItem>
       </Form>
     );
   }
 }
-
+StudentModifyForm.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 StudentModifyForm = Form.create()(StudentModifyForm);
 
 export default StudentModifyForm;

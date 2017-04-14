@@ -14,11 +14,10 @@ export default class Header extends React.Component {
   state = {
     current: 'mail',
   }
-  handleClick = (e) => {
-    console.log('click ', e);
-    this.setState({
-      current: e.key,
-    });
+  back = (e) => {
+    e.preventDefault();
+    window.history.back();
+    location.reload();
   }
   render() {
     return (
@@ -35,6 +34,9 @@ export default class Header extends React.Component {
           <Link  to='/login' >退出</Link>
         </Menu.Item>
         <Menu.Item className='link' key="2">
+          <a href="#" onClick={this.back}>返回</a>
+        </Menu.Item>               
+        <Menu.Item className='link' key="3">
           <Link to='/account' ><Icon type="setting" />账号管理</Link>
         </Menu.Item>                     
       </Menu>

@@ -50,22 +50,24 @@ export default class AccountComponent extends React.Component {
 		let name = this.state.data.name ? '姓名：' + this.state.data.name : '';
 		name = (<span>{name}</span>);
 		let userInfo;
-		if (sessionStorage.role_id == 2 || sessionStorage.role_id == 3) {
+		let role_id = sessionStorage.role_id;
+		if (role_id == 2 || role_id == 3) {
 			userInfo = (
 				<div className='user-info'>
 					<p><span className='tip'>姓名：</span><span>{this.state.data.name}</span></p>
 					<p><span className='tip'>校园卡号：</span><span>{this.state.data.card_number}</span></p>
 					<p><span className='tip'>办公室：</span><span>{this.state.data.office}</span></p>
 					<p><span className='tip'>办公电话：</span><span>{this.state.data.telephone}</span></p>
+					<p><span className='tip'>部门：</span><span>{this.state.data.department}</span></p>
 					<p><span className='tip'>手机：</span><span>{this.state.data.phone}</span></p>
 					<p><span className='tip'>短号：</span><span>{this.state.data.short_phone}</span></p>
 					<p><span className='tip'>邮箱：</span><span>{this.state.data.email}</span></p>
 					<p><span className='tip'>QQ：</span><span>{this.state.data.qq}</span></p>
 					<p><span className='tip'>微信：</span><span>{this.state.data.wechat}</span></p>
-					<Button type='primary' className='modify-button'><Link to='/userModify'>修改个人信息</Link></Button>
+					<Button type='primary' className='modify-button'><Link to={'/userModify/'+role_id+'/'+this.state.data.card_number}>修改个人信息</Link></Button>
 				</div>
 			);
-		} else if (sessionStorage.role_id == 4) {
+		} else if (role_id == 4) {
 			userInfo = (
 				<div className='user-info'>
 					<p><span className='tip'>姓名：</span><span>{this.state.data.name}</span></p>
@@ -79,7 +81,7 @@ export default class AccountComponent extends React.Component {
 					<p><span className='tip'>邮箱：</span><span>{this.state.data.email}</span></p>
 					<p><span className='tip'>QQ：</span><span>{this.state.data.qq}</span></p>
 					<p><span className='tip'>微信：</span><span>{this.state.data.wechat}</span></p>
-					<Button type='primary' className='modify-button'><Link to='/userModify'>修改个人信息</Link></Button>
+					<Button type='primary' className='modify-button'><Link to={'/userModify/'+role_id + '/' + this.state.data.card_number}>修改个人信息</Link></Button>
 				</div>
 			);
 		}
