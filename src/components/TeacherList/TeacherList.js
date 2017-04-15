@@ -303,6 +303,12 @@ class TeacherList extends React.Component {
         })
       }
     }
+    if (!res[0]) {
+      this.setState({
+        data: data
+      })
+      message.error('未找到教师信息');
+    }
   }
 
   //获取老师数据
