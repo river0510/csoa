@@ -14,6 +14,7 @@ import AddArticle from './pages/AddArticle'
 import Account from './pages/Account'
 import UserModify from './pages/UserModify'
 import TeacherManage from './pages/TeacherManage'
+import StudentManage from './pages/StudentManage'
 
 // Render the main component into the dom
 ReactDOM.render((
@@ -24,6 +25,7 @@ ReactDOM.render((
 			<Route path='/account' component={Account}/>
 			<Route path='/userModify/:role_id/:userName' component={UserModify}/>
 			<Route path='/teacherManage' component={TeacherManage}/>
+			<Route path='/studentManage' component={StudentManage}/>
 		</Route>
 		<Route path='/login' component={Login}/>
 		<Route path='/signup' component={Signup}/>

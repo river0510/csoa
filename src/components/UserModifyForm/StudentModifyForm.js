@@ -42,6 +42,7 @@ class StudentModifyForm extends React.Component {
           method: 'post',
           mode: 'cors',
           body: bodyquery,
+          credentials: "include",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
@@ -65,6 +66,7 @@ class StudentModifyForm extends React.Component {
       method: 'post',
       mode: 'cors',
       body: bodyquery,
+      credentials: "include",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },

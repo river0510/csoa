@@ -4,13 +4,14 @@ import {
 } from 'react-router'
 import {
   Menu,
-  Icon
+  Icon,
+  message
 } from 'antd'
 
-
 import './Header.scss'
+import config from '../../config'
 
-export default class Header extends React.Component {
+class Header extends React.Component {
   state = {
     current: 'mail',
   }
@@ -18,6 +19,26 @@ export default class Header extends React.Component {
     e.preventDefault();
     window.history.back();
     location.reload();
+  }
+  logout = () => {
+    fetch(config.api + '/User/logout', {
+      method: 'get',
+      mode: 'cors',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      if (data.status == 200) {
+        message.success(data.message);
+        sessionStorage.clear();
+        this.context.router.push('/login');
+      } else {
+        message.error(data.message);
+      }
+    }).catch(err => console.log(err))
   }
   render() {
     return (
@@ -31,7 +52,7 @@ export default class Header extends React.Component {
           <Icon type="mail" />计软学院学生事务管理平台
         </Menu.Item>
         <Menu.Item className='link' key="1">
-          <Link  to='/login' >退出</Link>
+          <a onClick={this.logout}>退出</a>
         </Menu.Item>
         <Menu.Item className='link' key="2">
           <a href="#" onClick={this.back}>返回</a>
@@ -43,3 +64,7 @@ export default class Header extends React.Component {
     );
   }
 }
+Header.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+export default Header;

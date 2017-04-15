@@ -12,22 +12,12 @@ import {
   Link
 } from 'react-router'
 import config from '../../config'
-import './TeacherList.scss'
+import './StudentList.scss'
 
 const confirm = Modal.confirm;
 const Search = Input.Search;
 
-// for (let i = 0; i < 46; i++) {
-//   data.push({
-//     key: i,
-//     id: i,
-//     name: `教师 ${i}`,
-//     card_number: `${i}${i}`,
-//     state: '启用'
-//   });
-// }
-
-class TeacherList extends React.Component {
+class StudentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,7 +60,7 @@ class TeacherList extends React.Component {
     //将异步操作 promise封装
     function start(id) {
       return new Promise((resolve, reject) => {
-        fetch(config.api + '/User/startTeacher?id=' + id, {
+        fetch(config.api + '/User/startStudent?id=' + id, {
           method: 'get',
           mode: 'cors',
           credentials: "include",
@@ -100,7 +90,7 @@ class TeacherList extends React.Component {
         } else {
           message.error('操作失败');
         }
-        this.getTeacher();
+        this.getStudent();
         this.setState({
           selectedRowKeys: []
         })
@@ -113,7 +103,7 @@ class TeacherList extends React.Component {
 
     function forbid(id) {
       return new Promise((resolve, reject) => {
-        fetch(config.api + '/User/forbidTeacher?id=' + id, {
+        fetch(config.api + '/User/forbidStudent?id=' + id, {
           method: 'get',
           mode: 'cors',
           credentials: "include",
@@ -144,7 +134,7 @@ class TeacherList extends React.Component {
         } else {
           message.error('操作失败');
         }
-        this.getTeacher();
+        this.getStudent();
         this.setState({
           selectedRowKeys: []
         })
@@ -154,12 +144,12 @@ class TeacherList extends React.Component {
   //选中删除确定对话框
   showDeleteSelectedConfirm(e) {
     e.preventDefault();
-    let deleteSelectedTeacher = this.deleteSeleted;
+    let deleteSelectedStudent = this.deleteSeleted;
     confirm({
       title: '确定要删除选中项吗？',
       content: '删除过后将无法恢复',
       onOk() {
-        deleteSelectedTeacher();
+        deleteSelectedStudent();
       },
       onCancel() {
         console.log('cancel');
@@ -171,9 +161,9 @@ class TeacherList extends React.Component {
   deleteSeleted = () => {
     let isSuccess = 1;
 
-    function deleteTeacher(id) {
+    function deleteStudent(id) {
       return new Promise((resolve, reject) => {
-        fetch(config.api + '/User/deleteTeacher?id=' + id, {
+        fetch(config.api + '/User/deleteStudent?id=' + id, {
           method: 'get',
           mode: 'cors',
           credentials: "include",
@@ -194,7 +184,7 @@ class TeacherList extends React.Component {
     let promiseArray = [];
     this.state.selectedRowKeys.forEach((value) => {
       let id = this.state.data[value].id;
-      promiseArray.push(deleteTeacher(id));
+      promiseArray.push(deleteStudent(id));
     })
 
     Promise.all(promiseArray)
@@ -204,7 +194,7 @@ class TeacherList extends React.Component {
         } else {
           message.error('操作失败');
         }
-        this.getTeacher();
+        this.getStudent();
         this.setState({
           selectedRowKeys: []
         })
@@ -214,10 +204,10 @@ class TeacherList extends React.Component {
   //单个删除确定对话框
   showDeleteConfirm(id, e) {
     e.preventDefault();
-    let getTeacher = this.getTeacher;
+    let getStudent = this.getStudent;
 
-    function deleteTeacher(id) {
-      fetch(config.api + '/User/deleteTeacher?id=' + id, {
+    function deleteStudent(id) {
+      fetch(config.api + '/User/deleteStudent?id=' + id, {
         method: 'get',
         mode: 'cors',
         credentials: "include",
@@ -229,7 +219,7 @@ class TeacherList extends React.Component {
       }).then((data) => {
         if (data.status == 200) {
           message.success(data.message);
-          getTeacher();
+          getStudent();
         } else {
           message.error(data.message);
         }
@@ -240,7 +230,7 @@ class TeacherList extends React.Component {
       title: '确定要删除吗？',
       content: '删除过后将无法恢复',
       onOk() {
-        deleteTeacher(id);
+        deleteStudent(id);
       },
       onCancel() {
         console.log('Cancel');
@@ -251,7 +241,7 @@ class TeacherList extends React.Component {
   //显示明细modal
   showDetail(id, e) {
     e.preventDefault();
-    this.getOneTeacher(id);
+    this.getOneStudent(id);
     this.setState({
       detailVisible: true
     })
@@ -276,7 +266,7 @@ class TeacherList extends React.Component {
   }
   handleImportOk = (e) => {
     e.preventDefault();
-    this.getTeacher();
+    this.getStudent();
     this.setState({
       importVisible: false,
       fileList: []
@@ -306,8 +296,8 @@ class TeacherList extends React.Component {
   }
 
   //获取老师数据
-  getTeacher = () => {
-    fetch(config.api + '/User/getTeacher', {
+  getStudent = () => {
+    fetch(config.api + '/User/getStudent', {
       method: 'get',
       mode: 'cors',
       credentials: "include",
@@ -318,21 +308,21 @@ class TeacherList extends React.Component {
       return res.json();
     }).then((data) => {
       if (data.status == 200) {
-        let teacher = data.teacher;
-        teacher.forEach((value, index) => {
+        let student = data.student;
+        student.forEach((value, index) => {
           value.key = index;
           value.state = value.state == 1 ? '可用' : '停用';
-          teacher[index] = value;
+          student[index] = value;
         })
         this.setState({
-          data: teacher,
-          search: teacher
+          data: student,
+          search: student
         })
       }
     }).catch(err => console.log(err))
   }
-  getOneTeacher = (id) => {
-    fetch(config.api + '/User/getOneTeacher?id=' + id, {
+  getOneStudent = (id) => {
+    fetch(config.api + '/User/getOneStudent?id=' + id, {
       method: 'get',
       mode: 'cors',
       credentials: "include",
@@ -343,34 +333,34 @@ class TeacherList extends React.Component {
       return res.json();
     }).then((data) => {
       if (data.status == 200) {
-        data.teacher['state'] = data.teacher['state'] == 1 ? '可用' : '停用'
+        data.student['state'] = data.student['state'] == 1 ? '可用' : '停用'
         this.setState({
-          detail: data.teacher
+          detail: data.student
         })
       }
     }).catch(err => console.log(err))
   }
 
   componentWillMount() {
-    this.getTeacher();
+    this.getStudent();
   }
 
   render() {
     const columns = [{
-      title: '教师编号',
+      title: '学生编号',
       dataIndex: 'id',
     }, {
       title: '姓名',
       dataIndex: 'name',
     }, {
-      title: '卡号',
+      title: '学号',
       dataIndex: 'card_number',
     }, {
-      title: '办公室',
-      dataIndex: 'office',
-    }, {
-      title: '办公电话',
-      dataIndex: 'telephone',
+      title: '宿舍',
+      dataIndex: 'dorm',
+    }, , {
+      title: '专业',
+      dataIndex: 'major',
     }, {
       title: '手机',
       dataIndex: 'phone',
@@ -432,9 +422,8 @@ class TeacherList extends React.Component {
           <div className="detail">
             <p>姓名：{this.state.detail.name}</p>
             <p>卡号：{this.state.detail.card_number}</p>
-            <p>办公室：{this.state.detail.office}</p>
-            <p>办公电话：{this.state.detail.telephone}</p>          
-            <p>部门：{this.state.detail.department}</p>
+            <p>宿舍：{this.state.detail.dorm}</p>
+            <p>专业：{this.state.detail.major}</p>          
             <p>手机：{this.state.detail.phone}</p>          
             <p>短号：{this.state.detail.short_phone}</p>
             <p>E-mail：{this.state.detail.email}</p>                    
@@ -443,7 +432,7 @@ class TeacherList extends React.Component {
           </div>
         </Modal>
         <Modal
-          className="import-teacher-modal"
+          className="import-student-modal"
           width="1100px"
           visible={this.state.importVisible}
           title="教师信息Excel导入"
@@ -456,10 +445,10 @@ class TeacherList extends React.Component {
           ]}
         >
           <p>上传事例：</p>
-          <img src="../../imgs/teacherExample.png" alt=""/>
+          <img src="../../imgs/studentExample.png" alt=""/>
           <Upload 
             name="uploadfile" 
-            action={config.api + "/User/importTeacher"} 
+            action={config.api + "/User/importStudent"} 
             listType="text"
           >
             <Button className="upload-button">
@@ -472,4 +461,4 @@ class TeacherList extends React.Component {
   }
 }
 
-export default TeacherList;
+export default StudentList;

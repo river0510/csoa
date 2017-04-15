@@ -61,7 +61,7 @@ export default class Sider extends React.Component {
 	      >
 	        <SubMenu key="sub1" title={<span>系统管理</span>} className={this.props.role.system_manage == 1 ? '':'hide'}>
 	          <Menu.Item key="1"><Link to='/teacherManage' >教师管理</Link></Menu.Item>
-	          <Menu.Item key="2"><Link to='/addArticle' >学生管理</Link></Menu.Item>
+	          <Menu.Item key="2"><Link to='/studentManage' >学生管理</Link></Menu.Item>
 	          <Menu.Item key="3"><Link to='/addArticle' >角色管理</Link></Menu.Item>
 	          <Menu.Item key="4"><Link to='/addArticle' >菜单管理</Link></Menu.Item>
 	          <Menu.Item key="5"><Link to='/addArticle' >日志管理</Link></Menu.Item>
