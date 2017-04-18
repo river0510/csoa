@@ -301,7 +301,7 @@ class StudentList extends React.Component {
     }
   }
 
-  //获取老师数据
+  //获取学生数据
   getStudent = () => {
     fetch(config.api + '/User/getStudent', {
       method: 'get',

@@ -17,15 +17,6 @@ import './TeacherList.scss'
 const confirm = Modal.confirm;
 const Search = Input.Search;
 
-// for (let i = 0; i < 46; i++) {
-//   data.push({
-//     key: i,
-//     id: i,
-//     name: `教师 ${i}`,
-//     card_number: `${i}${i}`,
-//     state: '启用'
-//   });
-// }
 
 class TeacherList extends React.Component {
   constructor(props) {

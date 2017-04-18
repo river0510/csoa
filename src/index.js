@@ -15,6 +15,7 @@ import Account from './pages/Account'
 import UserModify from './pages/UserModify'
 import TeacherManage from './pages/TeacherManage'
 import StudentManage from './pages/StudentManage'
+import PracticeManage from './pages/PracticeManage'
 
 // Render the main component into the dom
 ReactDOM.render((
@@ -26,6 +27,7 @@ ReactDOM.render((
 			<Route path='/userModify/:role_id/:userName' component={UserModify}/>
 			<Route path='/teacherManage' component={TeacherManage}/>
 			<Route path='/studentManage' component={StudentManage}/>
+			<Route path='/practiceManage' component={PracticeManage}/>
 		</Route>
 		<Route path='/login' component={Login}/>
 		<Route path='/signup' component={Signup}/>
