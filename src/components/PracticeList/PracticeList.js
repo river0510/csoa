@@ -213,10 +213,6 @@ class PracticeList extends React.Component {
 
   render() {
     const columns = [{
-      title: '编号',
-      dataIndex: 'id',
-      key: 'id'
-    }, {
       title: '学号',
       dataIndex: 'card_number',
       key: 'card_number'
@@ -262,25 +258,26 @@ class PracticeList extends React.Component {
         year = value.year;
     })
 
-    const yearColumns = [{
-      title: '实习年度',
-      dataIndex: 'year',
-      key: 'year',
-    }];
-    const yearRowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
-      onSelect: (record, selected, selectedRows) => {
-        console.log(record, selected, selectedRows);
-      },
-      onSelectAll: (selected, selectedRows, changeRows) => {
-        console.log(selected, selectedRows, changeRows);
-      },
-      getCheckboxProps: record => ({
-        disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      }),
-    };
+    // const yearColumns = [{
+    //   title: '实习年度',
+    //   dataIndex: 'year',
+    //   key: 'year',
+    // }];
+    // const yearRowSelection = {
+    //   onChange: (selectedRowKeys, selectedRows) => {
+    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    //   },
+    //   onSelect: (record, selected, selectedRows) => {
+    //     console.log(record, selected, selectedRows);
+    //   },
+    //   onSelectAll: (selected, selectedRows, changeRows) => {
+    //     console.log(selected, selectedRows, changeRows);
+    //   },
+    //   getCheckboxProps: record => ({
+    //     disabled: record.name === 'Disabled User', // Column configuration not to be checked
+    //   }),
+    // };
+
     return (
       <div>
         <div style={{ marginBottom: 16 }}>

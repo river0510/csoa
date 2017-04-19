@@ -75,7 +75,7 @@ export default class Sider extends React.Component {
 	        </SubMenu>
 			<SubMenu key="sub4" title={<span>实习报名</span>} className={sxbm ? '' : 'hide'}>
 			  <Menu.Item key="12" className={this.props.role.job_manage == 1 ? '':'hide'}><Link to='/practiceManage'>实习管理</Link></Menu.Item>
-	          <Menu.Item key="13" className={this.props.role.post_manage == 1 ? '':'hide'}><Link to='/addArticle'>岗位管理</Link></Menu.Item>
+	          <Menu.Item key="13" className={this.props.role.post_manage == 1 ? '':'hide'}><Link to='/jobManage'>岗位管理</Link></Menu.Item>
 			  <Menu.Item key="14" className={this.props.role.job_chose == 1 ? '':'hide'}><Link to='/addArticle'>选择岗位</Link></Menu.Item>
 	          <Menu.Item key="15" className={this.props.role.submit_document == 1 ? '':'hide'}><Link to='/addArticle'>提交文档</Link></Menu.Item>	          		 
 	        </SubMenu>                              
