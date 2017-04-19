@@ -28,6 +28,8 @@ class StudentModifyForm extends React.Component {
         let bodyquery =
           'card_number=' + this.props.userName +
           '&role_id=' + this.props.role_id +
+          '&sex=' + values.sex +
+          '&origin=' + values.origin +
           '&class=' + values.class +
           '&major=' + values.major +
           '&dorm=' + values.dorm +
@@ -121,6 +123,28 @@ class StudentModifyForm extends React.Component {
     };
     return (
       <Form onSubmit={this.handleSubmit} className='user-modify'>
+        <FormItem
+          {...formItemLayout}
+          label="性别"
+        >
+          {getFieldDecorator('sex', {
+            rules: [{ required: true, message: '请输入你的性别' }],
+            initialValue: this.state.data.sex
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="生源"
+        >
+          {getFieldDecorator('origin', {
+            rules: [{ required: true, message: '请输入你的生源' }],
+            initialValue: this.state.data.origin
+          })(
+            <Input />
+          )}
+        </FormItem>
         <FormItem
           {...formItemLayout}
           label="班级"

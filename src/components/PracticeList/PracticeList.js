@@ -255,9 +255,32 @@ class PracticeList extends React.Component {
     }];
 
     const options = [];
+    let year;
     this.state.yearData.forEach((value) => {
       options.push(<Option value={value.id} key={value.id}>{value.year}</Option>)
+      if (value.id == this.state.selectedYear)
+        year = value.year;
     })
+
+    const yearColumns = [{
+      title: '实习年度',
+      dataIndex: 'year',
+      key: 'year',
+    }];
+    const yearRowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      onSelect: (record, selected, selectedRows) => {
+        console.log(record, selected, selectedRows);
+      },
+      onSelectAll: (selected, selectedRows, changeRows) => {
+        console.log(selected, selectedRows, changeRows);
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      }),
+    };
     return (
       <div>
         <div style={{ marginBottom: 16 }}>
@@ -266,7 +289,7 @@ class PracticeList extends React.Component {
           </Select>
           <Button type="primary" className='top-button' onClick={this.showAddModal}>添加学生</Button>
           <Button type="primary" className='top-button' >统计结果导出</Button>
-          <Button type="primary" className='top-button' >实习年度管理</Button>
+          <Button type="primary" className='top-button' ><Link to='/yearManage'>实习年度管理</Link></Button>
           <Button type="primary" className='top-button' >实习模板管理</Button>
           <Search
             placeholder="搜索卡号、姓名、部门"
@@ -277,7 +300,7 @@ class PracticeList extends React.Component {
         <Table columns={columns} dataSource={this.state.practiceData} />
         <Modal
           visible={this.state.addStudentVisible}
-          title="添加学生"
+          title={year+"年度添加学生"}
           onOk={this.handleAddOk}
           onCancel={this.handleAddCancel}
           footer={[
@@ -288,7 +311,7 @@ class PracticeList extends React.Component {
         >
           <Input type="textarea" rows={10} ref='inputStudents'/>
           <Button type="primary" onClick={this.addStudent} className='add-button'>添加</Button>
-        </Modal>      
+        </Modal>     
       </div>
     );
   }

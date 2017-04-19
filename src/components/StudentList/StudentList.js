@@ -428,6 +428,8 @@ class StudentList extends React.Component {
           <div className="detail">
             <p>姓名：{this.state.detail.name}</p>
             <p>卡号：{this.state.detail.card_number}</p>
+            <p>性别：{this.state.detail.sex}</p>
+            <p>生源：{this.state.detail.origin}</p>
             <p>宿舍：{this.state.detail.dorm}</p>
             <p>专业：{this.state.detail.major}</p>          
             <p>手机：{this.state.detail.phone}</p>          
