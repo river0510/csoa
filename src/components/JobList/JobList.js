@@ -115,15 +115,11 @@ class JobList extends React.Component {
 		this.setState({
 			addStudentVisible: false
 		});
-		let inputNode = ReactDOM.findDOMNode(this.refs.inputStudents)
-		inputNode.value = null;
 	}
 	handleAddCancel = () => {
 		this.setState({
 			addStudentVisible: false
 		});
-		let inputNode = ReactDOM.findDOMNode(this.refs.inputStudents)
-		inputNode.value = null;
 	}
 
 
@@ -270,7 +266,7 @@ class JobList extends React.Component {
 			key: 'action',
 			render: (text, record) => (
 				<span>
-          <a href="#" onClick={this.showDeleteConfirm.bind(this,record.id)}>分配学生</a>
+          <Link to={'/distributeStudent/'+record.id+'/'+this.state.selectedYear}>分配学生</Link>
           <span className="ant-divider" />
           <a href="#" onClick={this.showModify.bind(this,record.id)}>修改</a>
           <span className="ant-divider" />
@@ -343,7 +339,7 @@ class JobList extends React.Component {
           onCancel={this.handleModifyCancel}
           footer={[           
           	<Button key="back" type="primary" size="large" onClick={this.handleModifyOk}>
-              OK
+              取消
             </Button>]}
         >
 			<JobModifyForm id={this.state.modifyId} data={this.state.modifyData}/>
