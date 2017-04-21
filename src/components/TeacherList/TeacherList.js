@@ -29,6 +29,7 @@ class TeacherList extends React.Component {
       data: [], //显示的数据
       search: [], //提供给搜索的所有数据
       detail: {},
+      fileList: [],
     };
   }
 
@@ -272,7 +273,6 @@ class TeacherList extends React.Component {
       importVisible: false,
       fileList: []
     })
-    message.success('教师信息导入成功');
   }
   handleImportCancel = (e) => {
     e.preventDefault();
@@ -302,6 +302,24 @@ class TeacherList extends React.Component {
     }
   }
 
+  //upload change
+  handleChange = (info) => {
+    console.log(info);
+    let fileList = info.fileList;
+
+    // 1. Limit the number of uploaded files
+    //    Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-1);
+
+    if (fileList[0].response) {
+      message.success(fileList[0].response.message);
+    }
+
+    this.setState({
+      fileList: fileList
+    });
+  }
+
   //获取老师数据
   getTeacher = () => {
     fetch(config.api + '/User/getTeacher', {
@@ -324,6 +342,11 @@ class TeacherList extends React.Component {
         this.setState({
           data: teacher,
           search: teacher
+        })
+      } else {
+        this.setState({
+          data: [],
+          search: []
         })
       }
     }).catch(err => console.log(err))
@@ -458,6 +481,10 @@ class TeacherList extends React.Component {
             name="uploadfile" 
             action={config.api + "/User/importTeacher"} 
             listType="text"
+            multiply={false}
+            withCredentials={true}
+            onChange={this.handleChange}
+            fileList={this.state.fileList}
           >
             <Button className="upload-button">
               <Icon type="upload" /> 选择文件

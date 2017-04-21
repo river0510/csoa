@@ -28,6 +28,7 @@ class StudentList extends React.Component {
       data: [], //显示的数据
       search: [], //提供给搜索的所有数据
       detail: {},
+      fileList: []
     };
   }
 
@@ -271,7 +272,6 @@ class StudentList extends React.Component {
       importVisible: false,
       fileList: []
     })
-    message.success('教师信息导入成功');
   }
   handleImportCancel = (e) => {
     e.preventDefault();
@@ -286,7 +286,7 @@ class StudentList extends React.Component {
     let res = [];
     //卡号、姓名查询
     for (let i = 0; i < data.length; i++) {
-      if (data[i].card_number == value || data[i].name == value || data[i].department == value) {
+      if (data[i].card_number == value || data[i].name == value || data[i].major == value) {
         res.push(data[i]);
         this.setState({
           data: res
@@ -299,6 +299,24 @@ class StudentList extends React.Component {
       })
       message.error('未找到学生信息');
     }
+  }
+
+  //upload change
+  handleChange = (info) => {
+    console.log(info);
+    let fileList = info.fileList;
+
+    // 1. Limit the number of uploaded files
+    //    Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-1);
+
+    if (fileList[0].response) {
+      message.success(fileList[0].response.message);
+    }
+
+    this.setState({
+      fileList: fileList
+    });
   }
 
   //获取学生数据
@@ -323,6 +341,11 @@ class StudentList extends React.Component {
         this.setState({
           data: student,
           search: student
+        })
+      } else {
+        this.setState({
+          data: [],
+          search: []
         })
       }
     }).catch(err => console.log(err))
@@ -443,7 +466,7 @@ class StudentList extends React.Component {
           className="import-student-modal"
           width="1100px"
           visible={this.state.importVisible}
-          title="教师信息Excel导入"
+          title="学生信息Excel导入"
           onOk={this.handleImportOk}
           onCancel={this.handleImportCancel}
           footer={[
@@ -458,6 +481,10 @@ class StudentList extends React.Component {
             name="uploadfile" 
             action={config.api + "/User/importStudent"} 
             listType="text"
+            multiply={false}
+            withCredentials={true}
+            onChange={this.handleChange}
+            fileList={this.state.fileList}
           >
             <Button className="upload-button">
               <Icon type="upload" /> 选择文件

@@ -21,7 +21,8 @@ class DistributeStudent extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			studentData: [], //年度数据
+			studentData: [], //学生数据
+			jobData: []
 		};
 	}
 
@@ -75,14 +76,13 @@ class DistributeStudent extends React.Component {
 		}).then((res) => {
 			return res.json();
 		}).then((data) => {
-			if (data.status == 200) {
-				data.student.forEach((value, index) => {
-					value.key = index
-				})
-				this.setState({
-					studentData: data.student
-				})
-			}
+			data.student.forEach((value, index) => {
+				value.key = index
+			})
+			this.setState({
+				studentData: data.student,
+				jobData: data.job
+			})
 		}).catch(err => console.log(err))
 	}
 
@@ -136,9 +136,9 @@ class DistributeStudent extends React.Component {
 		return (
 			<div>
 		        <div className='top'>
-		          <span className='title'>{this.state.studentData[0].company_name}</span><span className='title'>{this.state.studentData[0].job_name}</span><span className='title'>需要人数：{this.state.studentData[0].need_number}</span><span className='title'>报名人数：{this.state.studentData[0].apply_number}</span>
+		          <span className='title'>{this.state.jobData.company_name}</span><span className='title'>{this.state.jobData.job_name}</span><span className='title'>需要人数：{this.state.jobData.need_number}</span><span className='title'>报名人数：{this.state.jobData.apply_number}</span>
 		          <div className='distribute'>
-			          <Input type='text' ref='input' className='input'></Input>
+			          <Input type='text' ref='input' className='input' placeholder='请输入学号'></Input>
 			          <Button type="primary" className='top-button' onClick={this.distribute}>分配学生</Button>		          	
 		          </div>
 		        </div>

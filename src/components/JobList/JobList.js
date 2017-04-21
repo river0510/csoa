@@ -32,7 +32,8 @@ class JobList extends React.Component {
 			addStudentVisible: false,
 			importVisible: false,
 			modifyId: null,
-			modifyData: {}
+			modifyData: {},
+			fileList: []
 		};
 	}
 
@@ -137,7 +138,6 @@ class JobList extends React.Component {
 			importVisible: false,
 			fileList: []
 		})
-		message.success('岗位信息导入成功');
 	}
 	handleImportCancel = (e) => {
 		e.preventDefault();
@@ -168,6 +168,24 @@ class JobList extends React.Component {
 		})
 	}
 
+	//upload change
+	handleChange = (info) => {
+		console.log(info);
+		let fileList = info.fileList;
+
+		// 1. Limit the number of uploaded files
+		//    Only to show two recent uploaded files, and old ones will be replaced by the new
+		fileList = fileList.slice(-1);
+
+		if (fileList[0].response) {
+			message.success(fileList[0].response.message);
+		}
+
+		this.setState({
+			fileList: fileList
+		});
+	}
+
 	//获取对应年度的岗位数据
 	getJob = (year_id) => {
 		fetch(config.api + '/Practice/getJob?year_id=' + year_id, {
@@ -191,7 +209,6 @@ class JobList extends React.Component {
 				this.setState({
 					jobData: []
 				})
-				message.error(data.message);
 			}
 		}).catch(err => console.log(err))
 	}
@@ -212,6 +229,9 @@ class JobList extends React.Component {
 					modifyData: data.job
 				})
 			} else {
+				this.setState({
+					modifyData: data.job
+				})
 				message.error(data.message);
 			}
 		}).catch(err => console.log(err))
@@ -321,11 +341,15 @@ class JobList extends React.Component {
           ]}
         >
           <p>上传事例：</p>
-          <img src="../../imgs/jobExample.png" alt=""/>
+          <img src="../../imgs/jobExample.png" alt=""/> 
           <Upload 
             name="uploadfile" 
-            action={config.api + "/Practice/importJob?year_id=" + this.state.selectedYear} 
+            action={config.api + "/Practice/importJob?year_id=" + this.state.selectedYear}
             listType="text"
+            multiply={false}
+            withCredentials={true}
+            onChange={this.handleChange}
+            fileList={this.state.fileList}
           >
             <Button className="upload-button">
               <Icon type="upload" /> 选择文件

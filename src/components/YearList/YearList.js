@@ -200,6 +200,10 @@ class YearList extends React.Component {
 				this.setState({
 					yearData: data.year
 				})
+			} else {
+				this.setState({
+					yearData: []
+				})
 			}
 		}).catch(err => console.log(err))
 	}
