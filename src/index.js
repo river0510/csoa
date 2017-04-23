@@ -19,12 +19,14 @@ import PracticeManage from './pages/PracticeManage'
 import YearManage from './pages/YearManage'
 import JobManage from './pages/JobManage'
 import DistributeStudent from './pages/DistributeStudent'
+import NotComplete from './pages/NotComplete'
+import JobChose from './pages/JobChose'
 // Render the main component into the dom
 ReactDOM.render((
 	<Router history={hashHistory}>
 		<Route component={HomeLayout}>
 			<Route path='/' component={Account}/>
-			<Route path='/addArticle' component={AddArticle}/>
+			<Route path='/notComplete' component={NotComplete}/>
 			<Route path='/account' component={Account}/>
 			<Route path='/userModify/:role_id/:userName' component={UserModify}/>
 			<Route path='/teacherManage' component={TeacherManage}/>
@@ -33,6 +35,7 @@ ReactDOM.render((
 			<Route path='/yearManage' component={YearManage}/>
 			<Route path='/jobManage' component={JobManage}/>
 			<Route path='/distributeStudent/:job_id/:year_id' component={DistributeStudent}/>
+			<Route path='/jobChose' component={JobChose}/>
 		</Route>
 		<Route path='/login' component={Login}/>
 		<Route path='/signup' component={Signup}/>

@@ -10,6 +10,7 @@ import {
 
 import './Header.scss'
 import config from '../../config'
+import FeedBack from '../FeedBack/FeedBack.js'
 
 class Header extends React.Component {
   state = {
@@ -51,6 +52,7 @@ class Header extends React.Component {
         <Menu.Item key="mail">
           <Icon type="mail" />计软学院学生事务管理平台
         </Menu.Item>
+        <FeedBack/>
         <Menu.Item className='link' key="1">
           <a onClick={this.logout}>退出</a>
         </Menu.Item>

@@ -286,11 +286,8 @@ class StudentList extends React.Component {
     let res = [];
     //卡号、姓名查询
     for (let i = 0; i < data.length; i++) {
-      if (data[i].card_number == value || data[i].name == value || data[i].major == value) {
+      if (data[i].card_number == value || data[i].name == value || (data[i].major.indexOf(value) != -1)) {
         res.push(data[i]);
-        this.setState({
-          data: res
-        })
       }
     }
     if (!res[0]) {
@@ -298,6 +295,10 @@ class StudentList extends React.Component {
         data: data
       })
       message.error('未找到学生信息');
+    } else {
+      this.setState({
+        data: res
+      })
     }
   }
 
@@ -376,9 +377,6 @@ class StudentList extends React.Component {
 
   render() {
     const columns = [{
-      title: '学生编号',
-      dataIndex: 'id',
-    }, {
       title: '姓名',
       dataIndex: 'name',
     }, {

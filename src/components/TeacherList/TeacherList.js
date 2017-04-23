@@ -287,11 +287,8 @@ class TeacherList extends React.Component {
     let res = [];
     //卡号、姓名查询
     for (let i = 0; i < data.length; i++) {
-      if (data[i].card_number == value || data[i].name == value || data[i].department == value) {
+      if (data[i].card_number == value || data[i].name == value || (data[i].department.indexOf(value) != -1)) {
         res.push(data[i]);
-        this.setState({
-          data: res
-        })
       }
     }
     if (!res[0]) {
@@ -299,6 +296,10 @@ class TeacherList extends React.Component {
         data: data
       })
       message.error('未找到教师信息');
+    } else {
+      this.setState({
+        data: res
+      })
     }
   }
 
@@ -377,9 +378,6 @@ class TeacherList extends React.Component {
 
   render() {
     const columns = [{
-      title: '教师编号',
-      dataIndex: 'id',
-    }, {
       title: '姓名',
       dataIndex: 'name',
     }, {
