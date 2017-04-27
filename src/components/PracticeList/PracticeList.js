@@ -77,18 +77,20 @@ class PracticeList extends React.Component {
     let res = [];
     //卡号、姓名查询
     for (let i = 0; i < data.length; i++) {
-      if (data[i].card_number == value || data[i].name == value || data[i].department == value) {
+      let isFind = data[i].name.indexOf(value) != -1 || data[i].card_number.indexOf(value) != -1;
+      if (isFind) {
         res.push(data[i]);
-        this.setState({
-          data: res
-        })
       }
     }
     if (!res[0]) {
       this.setState({
-        data: data
+        practiceData: data
       })
-      message.error('未找到教师信息');
+      message.error('未找到岗位信息');
+    } else {
+      this.setState({
+        practiceData: res
+      })
     }
   }
 
@@ -285,13 +287,13 @@ class PracticeList extends React.Component {
             {options}
           </Select>
           <Button type="primary" className='top-button' onClick={this.showAddModal}>添加学生</Button>
-          <Button type="primary" className='top-button' >统计结果导出</Button>
+          <Button type="primary" className='top-button' ><a href={config.api + '/Practice/export?year_id=' + this.state.selectedYear}>统计结果导出</a></Button>
           <Button type="primary" className='top-button' ><Link to='/yearManage'>实习年度管理</Link></Button>
           <Button type="primary" className='top-button' >实习模板管理</Button>
           <Search
             placeholder="搜索卡号、姓名、部门"
             style={{ width: 200 ,float:"right",marginRight:20}}
-            onSearch={value=>{this.search(value)}}
+            onSearch={this.search}
           />
         </div>
         <Table columns={columns} dataSource={this.state.practiceData} />

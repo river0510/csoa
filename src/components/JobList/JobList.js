@@ -33,7 +33,8 @@ class JobList extends React.Component {
 			importVisible: false,
 			modifyId: null,
 			modifyData: {},
-			fileList: []
+			fileList: [],
+			search: []
 		};
 	}
 
@@ -80,23 +81,25 @@ class JobList extends React.Component {
 		let res = [];
 		//卡号、姓名查询
 		for (let i = 0; i < data.length; i++) {
-			if (data[i].card_number == value || data[i].name == value || data[i].department == value) {
+			let isFind = data[i].company_name.indexOf(value) != -1 || data[i].job_name.indexOf(value) != -1;
+			if (isFind) {
 				res.push(data[i]);
-				this.setState({
-					data: res
-				})
 			}
 		}
 		if (!res[0]) {
 			this.setState({
-				data: data
+				jobData: data
 			})
-			message.error('未找到教师信息');
+			message.error('未找到岗位信息');
+		} else {
+			this.setState({
+				jobData: res
+			})
 		}
 	}
 
 	//下拉选择
-	handleChange = (value) => {
+	handleSelectChange = (value) => {
 		this.setState({
 			selectedYear: value
 		}, () => {
@@ -169,7 +172,7 @@ class JobList extends React.Component {
 	}
 
 	//upload change
-	handleChange = (info) => {
+	handleUploadChange = (info) => {
 		console.log(info);
 		let fileList = info.fileList;
 
@@ -204,10 +207,12 @@ class JobList extends React.Component {
 				})
 				this.setState({
 					jobData: data.job,
+					search: data.job
 				})
 			} else {
 				this.setState({
-					jobData: []
+					jobData: [],
+					search: []
 				})
 			}
 		}).catch(err => console.log(err))
@@ -315,7 +320,7 @@ class JobList extends React.Component {
 		return (
 			<div>
         <div style={{ marginBottom: 16 }}>
-          <Select value={this.state.selectedYear} style={{ width: 120 }} onChange={this.handleChange}>
+          <Select value={this.state.selectedYear} style={{ width: 120 }} onChange={this.handleSelectChange}>
             {options}
           </Select>
           <Button type="primary" className='top-button' onClick={this.showImport}>添加岗位</Button>
@@ -323,7 +328,7 @@ class JobList extends React.Component {
           <Search
             placeholder="搜索卡号、姓名、部门"
             style={{ width: 200 ,float:"right",marginRight:20}}
-            onSearch={value=>{this.search(value)}}
+            onSearch={this.search}
           />
         </div>
         <Table columns={columns} dataSource={this.state.jobData} />
@@ -348,7 +353,7 @@ class JobList extends React.Component {
             listType="text"
             multiply={false}
             withCredentials={true}
-            onChange={this.handleChange}
+            onChange={this.handleUploadChange}
             fileList={this.state.fileList}
           >
             <Button className="upload-button">

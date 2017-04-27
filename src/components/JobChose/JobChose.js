@@ -15,6 +15,7 @@ import {
 } from 'react-router'
 import config from '../../config'
 import './JobChose.scss'
+import OtherChoseForm from './OtherChoseForm'
 
 const confirm = Modal.confirm;
 const Search = Input.Search;
@@ -28,7 +29,8 @@ class JobChose extends React.Component {
 			deadline: null,
 			detailVisible: false,
 			detail: [],
-			search: []
+			search: [],
+			otherChoseVisible: false
 		};
 	}
 
@@ -59,7 +61,7 @@ class JobChose extends React.Component {
 
 		confirm({
 			title: '确定要报名吗？',
-			content: '每位同学只能选报一个岗位哦',
+			content: '每位同学只能选报一个岗位哦（报名前请先前往=>账号管理完善个人信息）',
 			onOk() {
 				applyJob(id);
 			},
@@ -113,12 +115,10 @@ class JobChose extends React.Component {
 		//卡号、姓名查询
 		for (let i = 0; i < data.length; i++) {
 			let isFind = (data[i].company_name.indexOf(value) != -1) || (data[i].job_name.indexOf(value) != -1);
-			console.log(isFind);
 			if (isFind) {
 				res.push(data[i]);
 			}
 		}
-		console.log(res);
 		if (!res[0]) {
 			this.setState({
 				jobData: data
@@ -149,6 +149,30 @@ class JobChose extends React.Component {
 		this.setState({
 			detailVisible: false
 		})
+	}
+
+	//显示自报岗位modal
+	showOtherChose = (e) => {
+		e.preventDefault();
+		this.setState({
+			otherChoseVisible: true
+		})
+	}
+	handleOtherChoseOk = () => {
+		this.getJob();
+		this.setState({
+			otherChoseVisible: false
+		})
+	}
+	handleOtherChoseCancel = () => {
+		this.getJob();
+		this.setState({
+			otherChoseVisible: false
+		})
+	}
+
+	formColse = () => {
+		return this.handleOtherChoseOk();
 	}
 
 	//获取对应年度的岗位数据
@@ -214,23 +238,25 @@ class JobChose extends React.Component {
 			title: '岗位名称',
 			dataIndex: 'job_name',
 			key: 'job_name',
-			width: 150,
 		}, {
 			title: '待遇',
 			dataIndex: 'salary',
 			key: 'salary',
-			width: 300,
+			width: 250,
 		}, {
 			title: '需要人数',
 			dataIndex: 'need_number',
-			key: 'need_number'
+			key: 'need_number',
+			width: 80,
 		}, {
 			title: '报名人数',
 			dataIndex: 'apply_number',
-			key: 'apply_number'
+			key: 'apply_number',
+			width: 80,
 		}, {
 			title: '操作',
 			key: 'action',
+			width: 100,
 			render: (text, record) => {
 				if (record.is_chosed) {
 					return (
@@ -255,27 +281,29 @@ class JobChose extends React.Component {
 		return (
 			<div>
         <div style={{ marginBottom: 16 }}>
+          <Button type="primary" className='top-button' onClick={this.showOtherChose}>自选实习</Button>
           <Button type="primary" className='top-button' onClick={this.showDeleteApplyConfirm}>撤销报名</Button>
           <span>截止时间：{this.state.deadline}</span>
           <span style={{marginLeft:20,color:'#2f7ae0',fontSize:15}}>每位同学只能选择一个岗位,有疑问请联系学院 26534325</span>
           <Search
             placeholder="搜索公司或岗位"
-            style={{ width: 200 ,float:"right",marginRight:20}}
+            style={{ width: 150 ,float:"right",marginRight:20}}
             onSearch={this.search}
           />
         </div>
         <Table columns={columns} dataSource={this.state.jobData} />
         <Modal
-          visible={this.state.modifyVisible}
-          title="岗位信息修改"
-          onOk={this.handleModifyOk}
-          onCancel={this.handleModifyCancel}
+          visible={this.state.otherChoseVisible}
+          title="自报岗位"
+          onOk={this.handleOtherChoseOk}
+          onCancel={this.handleOtherChoseCancel}
           footer={[           
-          	<Button key="back" type="primary" size="large" onClick={this.handleModifyOk}>
+          	<Button key="back" type="primary" size="large" onClick={this.handleOtherChoseOk}>
               取消
             </Button>]}
         >
-        </Modal> 
+        	<OtherChoseForm close={this.formColse}/>
+        </Modal>
         <Modal
           visible={this.state.detailVisible}
           title="详细信息"
@@ -292,7 +320,8 @@ class JobChose extends React.Component {
             <p><span className='detail-title'>公司网址：</span>{this.state.detail.company_website}</p>
             <p><span className='detail-title'>岗位名称：</span>{this.state.detail.job_name}</p>
             <p><span className='detail-title'>岗位职责：</span>{this.state.detail.job_duty}</p>
-            <p><span className='detail-title'>待遇：</span>{this.state.detail.demand}</p>
+            <p><span className='detail-title'>要求：</span>{this.state.detail.demand}</p>
+            <p><span className='detail-title'>待遇：</span>{this.state.detail.salary}</p>
             <p><span className='detail-title'>工作时间：</span>{this.state.detail.working_time}</p>
             <p><span className='detail-title'>公司地址：</span>{this.state.detail.position}</p>
             <p><span className='detail-title'>推荐教师：</span>{this.state.detail.recommend_teacher}</p>
