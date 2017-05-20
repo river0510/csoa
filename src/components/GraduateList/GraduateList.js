@@ -14,20 +14,19 @@ import {
   Link
 } from 'react-router'
 import config from '../../config'
-import './PracticeList.scss'
 
 const confirm = Modal.confirm;
 const Search = Input.Search;
 const Option = Select.Option;
 
 
-class PracticeList extends React.Component {
+class GraduateList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       yearData: [], //年度数据
       selectedYear: null, //选中的年份
-      practiceData: [], //实习数据
+      graduateData: [], //毕设数据
       search: [], //所有实习数据，用来搜索
       addStudentVisible: false
     };
@@ -36,11 +35,11 @@ class PracticeList extends React.Component {
   //单个删除确定对话框
   showDeleteConfirm(id, e) {
     e.preventDefault();
-    let getPracticeStudent = this.getPracticeStudent();
+    let getGraduateStudent = this.getGraduateStudent();
     let year_id = this.state.selectedYear;
 
     function deleteTeacher(id) {
-      fetch(config.api + '/Practice/deleteStudent?id=' + id, {
+      fetch(config.api + '/Graduate/deleteStudent?id=' + id, {
         method: 'get',
         mode: 'cors',
         credentials: "include",
@@ -52,7 +51,7 @@ class PracticeList extends React.Component {
       }).then((data) => {
         if (data.status == 200) {
           message.success(data.message);
-          getPracticeStudent(year_id);
+          getGraduateStudent(year_id);
         } else {
           message.error(data.message);
         }
@@ -84,12 +83,12 @@ class PracticeList extends React.Component {
     }
     if (!res[0]) {
       this.setState({
-        practiceData: data
+        graduateData: data
       })
-      message.error('未找到岗位信息');
+      message.error('未找到学生信息');
     } else {
       this.setState({
-        practiceData: res
+        graduateData: res
       })
     }
   }
@@ -101,7 +100,7 @@ class PracticeList extends React.Component {
     }, () => {
       let year_id = this.state.selectedYear;
       console.log(`selected ${year_id}`);
-      this.getPracticeStudent(year_id);
+      this.getGraduateStudent(year_id);
     })
   }
 
@@ -133,7 +132,7 @@ class PracticeList extends React.Component {
     let inputNode = ReactDOM.findDOMNode(this.refs.inputStudents)
     let year_id = this.state.selectedYear;
     let bodyquery = 'year_id=' + year_id + '&students=' + inputNode.value;
-    fetch(config.api + '/Practice/addStudent', {
+    fetch(config.api + '/Graduate/addStudent', {
       method: 'post',
       mode: 'cors',
       credentials: "include",
@@ -146,17 +145,17 @@ class PracticeList extends React.Component {
     }).then((data) => {
       if (data.status == 200) {
         message.success(data.message);
-        this.getPracticeStudent(year_id);
+        this.getGraduateStudent(year_id);
       } else {
         message.error(data.message);
-        this.getPracticeStudent(year_id);
+        this.getGraduateStudent(year_id);
       }
     }).catch(err => console.log(err))
   }
 
   //获取对应年度的学生数据
-  getPracticeStudent = (year_id) => {
-    fetch(config.api + '/Practice/getPracticeStudent?year_id=' + year_id, {
+  getGraduateStudent = (year_id) => {
+    fetch(config.api + '/Graduate/getGraduateStudent?year_id=' + year_id, {
       method: 'get',
       mode: 'cors',
       credentials: "include",
@@ -167,18 +166,18 @@ class PracticeList extends React.Component {
       return res.json();
     }).then((data) => {
       if (data.status == 200) {
-        let practiceStudent = data.practiceStudent;
-        practiceStudent.forEach((value, index) => {
+        let graduateStudent = data.graduateStudent;
+        graduateStudent.forEach((value, index) => {
           value.key = value.id;
-          practiceStudent[index] = value;
+          graduateStudent[index] = value;
         })
         this.setState({
-          practiceData: practiceStudent,
-          search: practiceStudent
+          graduateData: graduateStudent,
+          search: graduateStudent
         })
       } else if (data.status == 400) {
         this.setState({
-          practiceData: [],
+          graduateData: [],
           search: []
         })
         message.error(data.message);
@@ -188,7 +187,7 @@ class PracticeList extends React.Component {
 
   //获取所有年度
   getYear = () => {
-    fetch(config.api + '/Practice/getYear', {
+    fetch(config.api + '/Graduate/getYear', {
       method: 'get',
       mode: 'cors',
       credentials: "include",
@@ -203,7 +202,7 @@ class PracticeList extends React.Component {
           yearData: data.year,
           selectedYear: data.year[0].id
         }, () => {
-          this.getPracticeStudent(this.state.selectedYear)
+          this.getGraduateStudent(this.state.selectedYear)
         })
       }
     }).catch(err => console.log(err))
@@ -223,21 +222,13 @@ class PracticeList extends React.Component {
       dataIndex: 'name',
       key: 'name'
     }, {
-      title: '专业',
-      dataIndex: 'major',
-      key: 'major'
+      title: '毕设题目',
+      dataIndex: 'project_name',
+      key: 'project_name'
     }, {
-      title: '班级',
-      dataIndex: 'class',
-      key: 'class'
-    }, {
-      title: '实习公司',
-      dataIndex: 'company_name',
-      key: 'company_name'
-    }, {
-      title: '指导老师',
+      title: '指导教师',
       dataIndex: 'teacher_name',
-      key: 'teacher_name'
+      key: 'teacher'
     }, {
       title: '成绩',
       dataIndex: 'grade',
@@ -261,7 +252,6 @@ class PracticeList extends React.Component {
     })
 
 
-
     return (
       <div>
         <div style={{ marginBottom: 16 }}>
@@ -278,7 +268,7 @@ class PracticeList extends React.Component {
             onSearch={this.search}
           />
         </div>
-        <Table columns={columns} dataSource={this.state.practiceData} />
+        <Table columns={columns} dataSource={this.state.graduateData} />
         <Modal
           visible={this.state.addStudentVisible}
           title={year+"年度添加学生"}
@@ -298,4 +288,4 @@ class PracticeList extends React.Component {
   }
 }
 
-export default PracticeList;
+export default GraduateList;
