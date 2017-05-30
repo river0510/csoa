@@ -22,6 +22,7 @@ import DistributeStudent from './pages/DistributeStudent'
 import NotComplete from './pages/NotComplete'
 import JobChose from './pages/JobChose'
 import GraduateManage from './pages/GraduateManage'
+import GraduateYearManage from './pages/GraduateYearManage'
 // Render the main component into the dom
 ReactDOM.render((
 	<Router history={hashHistory}>
@@ -38,6 +39,7 @@ ReactDOM.render((
 			<Route path='/distributeStudent/:job_id/:year_id' component={DistributeStudent}/>
 			<Route path='/jobChose' component={JobChose}/>
 			<Route path='/graduateManage' component={GraduateManage}/>
+			<Route path='/graduateYearManage' component={GraduateYearManage}/>
 		</Route>
 		<Route path='/login' component={Login}/>
 		<Route path='/signup' component={Signup}/>

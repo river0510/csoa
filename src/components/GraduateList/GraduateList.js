@@ -260,7 +260,7 @@ class GraduateList extends React.Component {
           </Select>
           <Button type="primary" className='top-button' onClick={this.showAddModal}>添加学生</Button>
           <Button type="primary" className='top-button' ><a href={config.api + '/Practice/export?year_id=' + this.state.selectedYear}>统计结果导出</a></Button>
-          <Button type="primary" className='top-button' ><Link to='/yearManage'>年度管理</Link></Button>
+          <Button type="primary" className='top-button' ><Link to='/graduateYearManage'>年度管理</Link></Button>
           <Button type="primary" className='top-button' >模板管理</Button>
           <Search
             placeholder="搜索卡号、姓名、部门"
