@@ -69,7 +69,7 @@ export default class Sider extends React.Component {
 	        <SubMenu key="sub2" title={<span>毕业选题</span>} className={byxt ? '' : 'hide'}>
 	          <Menu.Item key="6" className={this.props.role.project_manage == 1 ? '':'hide'}><Link to='/graduateManage'>毕设管理</Link></Menu.Item>
 	          <Menu.Item key="8" className={this.props.role.document_download == 1 ? '':'hide'}><Link to='/notComplete'>文档下载</Link></Menu.Item>
-	          <Menu.Item key="9" className={this.props.role.teacher_project == 1 ? '':'hide'}><Link to='/notComplete'>老师报题</Link></Menu.Item>
+	          <Menu.Item key="9" className={this.props.role.teacher_project == 1 ? '':'hide'}><Link to='/projectCreate'>老师报题</Link></Menu.Item>
 	          <Menu.Item key="10" className={this.props.role.teacher_confirm == 1 ? '':'hide'}><Link to='/notComplete'>老师确认</Link></Menu.Item>
 	          <Menu.Item key="11" className={this.props.role.project_chose == 1 ? '':'hide'}><Link to='/notComplete'>学生选题</Link></Menu.Item>
 	        </SubMenu>

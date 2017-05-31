@@ -23,6 +23,7 @@ import NotComplete from './pages/NotComplete'
 import JobChose from './pages/JobChose'
 import GraduateManage from './pages/GraduateManage'
 import GraduateYearManage from './pages/GraduateYearManage'
+import ProjectCreate from './pages/ProjectCreate'
 // Render the main component into the dom
 ReactDOM.render((
 	<Router history={hashHistory}>
@@ -40,6 +41,7 @@ ReactDOM.render((
 			<Route path='/jobChose' component={JobChose}/>
 			<Route path='/graduateManage' component={GraduateManage}/>
 			<Route path='/graduateYearManage' component={GraduateYearManage}/>
+			<Route path='/projectCreate' component={ProjectCreate}/>
 		</Route>
 		<Route path='/login' component={Login}/>
 		<Route path='/signup' component={Signup}/>
