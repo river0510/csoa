@@ -52,7 +52,7 @@ class JobModifyForm extends React.Component {
 						message.success(data.message);
 						setTimeout(() => {
 							location.reload();
-						}, 500)
+						}, 300)
 					} else {
 						message.error(data.message);
 					}

@@ -16,6 +16,7 @@ import {
 import config from '../../config'
 import './JobChose.scss'
 import ProjectCreateForm from './ProjectCreateForm'
+import ProjectModifyForm from './ProjectModifyForm'
 
 const confirm = Modal.confirm;
 const Search = Input.Search;
@@ -29,7 +30,9 @@ class JobChose extends React.Component {
 			detailVisible: false,
 			detail: [],
 			search: [],
-			otherChoseVisible: false
+			otherChoseVisible: false,
+			modifyVisible: false,
+			modifyData: {}
 		};
 	}
 
@@ -56,6 +59,42 @@ class JobChose extends React.Component {
 		}
 	}
 
+	  //单个删除确定对话框
+	  showDeleteConfirm(id, e) {
+	    e.preventDefault();
+	    let getProject = this.getProject;
+	    function deleteTeacher(id) {
+	      fetch(config.api + '/Graduate/deleteProject?id=' + id, {
+	        method: 'get',
+	        mode: 'cors',
+	        credentials: "include",
+	        headers: {
+	          "Content-Type": "application/x-www-form-urlencoded"
+	        }
+	      }).then((res) => {
+	        return res.json();
+	      }).then((data) => {
+	        if (data.status == 200) {
+	          message.success(data.message);
+	          getProject();
+	        } else {
+	          message.error(data.message);
+	        }
+	      }).catch(err => console.log(err))
+	    }
+
+	    confirm({
+	      title: '确定要删除吗？',
+	      content: '删除过后将无法恢复',
+	      onOk() {
+	        deleteTeacher(id);
+	      },
+	      onCancel() {
+	        console.log('Cancel');
+	      },
+	    });
+	  }
+
 	//显示题目创建modal
 	showProjectCreate = (e) => {
 		e.preventDefault();
@@ -77,6 +116,30 @@ class JobChose extends React.Component {
 	}
 	formColse = () => {
 		return this.handleOtherChoseOk();
+	}
+
+	//显示修改题目modal
+	showProjectModify(id,e){
+		e.preventDefault();
+		this.getOneProject(id);
+		this.setState({
+			modifyVisible: true
+		})
+	}
+	modifyOk = () => {
+		this.getProject();
+		this.setState({
+			modifyVisible: false
+		})
+	}
+	modifyCancel = () => {
+		this.getProject();
+		this.setState({
+			modifyVisible: false
+		})
+	}
+	modifyFormColse = () => {
+		return this.modifyOk();
 	}
 
 	//获取对应年度的岗位数据
@@ -103,6 +166,30 @@ class JobChose extends React.Component {
 				this.setState({
 					projectData: [],
 					search: []
+				})
+			}
+		}).catch(err => console.log(err))
+	}
+
+	//获取对应年度的岗位数据
+	getOneProject = (id) => {
+		fetch(config.api + '/Graduate/getOneProject?id=' + id, {
+			method: 'get',
+			mode: 'cors',
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			},
+		}).then((res) => {
+			return res.json();
+		}).then((data) => {
+			if (data.status == 200) {
+				this.setState({
+					modifyData: data.project
+				})
+			} else {
+				this.setState({
+					modifyData: {}
 				})
 			}
 		}).catch(err => console.log(err))
@@ -144,9 +231,9 @@ class JobChose extends React.Component {
 				if (record.is_mine) {
 					return (
 						<span>
-					        <a href="#" >修改</a>
+					        <a href="#" onClick={this.showProjectModify.bind(this,record.id)}>修改</a>
 					        <span className="ant-divider" />
-							<a href="#" >删除</a>
+							<a href="#" onClick={this.showDeleteConfirm.bind(this,record.id)}>删除</a>
 						</span>
 					)
 				}
@@ -175,6 +262,18 @@ class JobChose extends React.Component {
             </Button>]}
         >
         	<ProjectCreateForm close={this.formColse}/>
+        </Modal>
+        <Modal
+          visible={this.state.modifyVisible}
+          title="题目修改"
+          onOk={this.modifyOk}
+          onCancel={this.modifyCancel}
+          footer={[           
+          	<Button key="back" type="primary" size="large" onClick={this.modifyOk}>
+              取消
+            </Button>]}
+        >
+        	<ProjectModifyForm close={this.modifyFormColse} data={this.state.modifyData}/>
         </Modal>
       </div>
 		);
