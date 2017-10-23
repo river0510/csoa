@@ -165,6 +165,8 @@ class ProjectChose extends React.Component {
 				data.project.forEach((value) => {
 					value.key = value.id
 				})
+
+			console.log(data.project);
 				this.setState({
 					projectData: data.project,
 					search: data.project,
@@ -182,7 +184,7 @@ class ProjectChose extends React.Component {
 	}
 
 	getOneProject = (id) => {
-		fetch(config.api + '/Graduate/getOneProjectByStudent?id=' + id, {
+		fetch(config.api + '/Graduate/getOneProject?id=' + id, {
 			method: 'get',
 			mode: 'cors',
 			credentials: "include",
@@ -194,7 +196,7 @@ class ProjectChose extends React.Component {
 		}).then((data) => {
 			if (data.status == 200) {
 				this.setState({
-					detail: data.job
+					detail: data.project
 				})
 			}
 		}).catch(err => console.log(err))
@@ -239,13 +241,19 @@ class ProjectChose extends React.Component {
 				if(record.state == 1){
 					return (
 						<span>
-					        {record.is_chosed == 1 ? "已报名" : "已锁定" }
+							<a href="#" onClick={this.showDetail.bind(this,record.id)}>明细</a>
+				            <span className="ant-divider" />
+							<span>
+						        {record.is_chosed == 1 ? "已报名" : "已锁定" }
+							</span>
 						</span>
 					)
 				}else{
 					return (
 						<span>
-					        {record.is_chosed == 1 ? "已报名" : <a onClick={this.showApplyConfirm.bind(this,record.id)}>报名</a> }
+							<a href="#" onClick={this.showDetail.bind(this,record.id)}>明细</a>
+				            <span className="ant-divider" />
+				            <span>{record.is_chosed == 1 ? "已报名" : <a onClick={this.showApplyConfirm.bind(this,record.id)}>报名</a> }</span>
 						</span>
 					)
 				}
@@ -277,16 +285,19 @@ class ProjectChose extends React.Component {
           ]}
         >
           <div className="detail">
-            <p><span className='detail-title'>公司名称：</span>{this.state.detail.company_name}</p>
-            <p><span className='detail-title'>公司网址：</span>{this.state.detail.company_website}</p>
-            <p><span className='detail-title'>岗位名称：</span>{this.state.detail.job_name}</p>
-            <p><span className='detail-title'>岗位职责：</span>{this.state.detail.job_duty}</p>
-            <p><span className='detail-title'>要求：</span>{this.state.detail.demand}</p>
-            <p><span className='detail-title'>待遇：</span>{this.state.detail.salary}</p>
-            <p><span className='detail-title'>工作时间：</span>{this.state.detail.working_time}</p>
-            <p><span className='detail-title'>公司地址：</span>{this.state.detail.position}</p>
-            <p><span className='detail-title'>推荐教师：</span>{this.state.detail.recommend_teacher}</p>
-            <p><span className='detail-title'>其他：</span>{this.state.detail.other}</p>
+            <p><span className='detail-title'>教师名称：</span>{this.state.detail.name}</p>
+            <p><span className='detail-title'>课题名称：</span>{this.state.detail.project_name}</p>
+            <p><span className='detail-title'>课题来源：</span>{this.state.detail.project_from}</p>
+            <p><span className='detail-title'>研究方向：</span>{this.state.detail.project_direction}</p>
+            <p><span className='detail-title'>可带学生人数：</span>{this.state.detail.number}</p>
+            <p><span className='detail-title'>课题背景：</span>{this.state.detail.project_background}</p>
+            <p><span className='detail-title'>技能要求：</span>{this.state.detail.demand}</p>
+            <p><span className='detail-title'>备注：</span>{this.state.detail.other}</p>
+            <p><span className='detail-title'>老师办公室：</span>{this.state.detail.office}</p>
+            <p><span className='detail-title'>老师办公电话：</span>{this.state.detail.telephone}</p>
+            <p><span className='detail-title'>老师手机：</span>{this.state.detail.phone}</p>
+            <p><span className='detail-title'>老师短号：</span>{this.state.detail.short_phone}</p>
+            <p><span className='detail-title'>老师邮箱：</span>{this.state.detail.email}</p>
           </div>
         </Modal>
       </div>

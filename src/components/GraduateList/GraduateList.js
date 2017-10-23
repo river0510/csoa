@@ -28,7 +28,9 @@ class GraduateList extends React.Component {
       selectedYear: null, //选中的年份
       graduateData: [], //毕设数据
       search: [], //所有实习数据，用来搜索
-      addStudentVisible: false
+      addStudentVisible: false,
+      detailVisible: false,
+      detail: []
     };
   }
 
@@ -92,6 +94,24 @@ class GraduateList extends React.Component {
       })
     }
   }
+  //显示明细modal
+  showDetail(id, e) {
+    e.preventDefault();
+    this.getOneProject(id);
+    this.setState({
+      detailVisible: true
+    })
+  }
+  handleDetailOk = () => {
+    this.setState({
+      detailVisible: false
+    })
+  }
+  handleDetailCancel = () => {
+    this.setState({
+      detailVisible: false
+    })
+  }
 
   //下拉选择
   handleChange = (value) => {
@@ -153,6 +173,30 @@ class GraduateList extends React.Component {
     }).catch(err => console.log(err))
   }
 
+  //获得一个课题详细信息
+  getOneProject = (id)=>{
+    fetch(config.api + '/Graduate/getOneProject?id=' + id, {
+      method: 'get',
+      mode: 'cors',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      if (data.status == 200) {
+        console.log(data)
+
+        this.setState({
+          detail: data.project
+        })
+      } else if (data.status == 400) {
+        message.error(data.message);
+      }
+    }).catch(err => console.log(err))
+  }
+
   //获取对应年度的学生数据
   getGraduateStudent = (year_id) => {
     fetch(config.api + '/Graduate/getGraduateStudent?year_id=' + year_id, {
@@ -170,7 +214,9 @@ class GraduateList extends React.Component {
         graduateStudent.forEach((value, index) => {
           value.key = value.id;
           graduateStudent[index] = value;
+          delete graduateStudent[index].grade;
         })
+        console.log(graduateStudent);
         this.setState({
           graduateData: graduateStudent,
           search: graduateStudent
@@ -222,22 +268,20 @@ class GraduateList extends React.Component {
       dataIndex: 'name',
       key: 'name'
     }, {
-      title: '毕设题目',
+      title: '研究题目',
       dataIndex: 'project_name',
       key: 'project_name'
     }, {
       title: '指导教师',
       dataIndex: 'teacher_name',
       key: 'teacher'
-    }, {
-      title: '成绩',
-      dataIndex: 'grade',
-      key: 'grade'
-    }, {
+    },{
       title: '操作',
       key: 'action',
       render: (text, record) => (
         <span>
+          <a href="#" onClick={this.showDetail.bind(this,record.project_id)}>明细</a>
+          <span className="ant-divider" />
           <a href="#" onClick={this.showDeleteConfirm.bind(this,record.id)}>删除</a>
         </span>
       ),
@@ -261,7 +305,7 @@ class GraduateList extends React.Component {
           <Button type="primary" className='top-button' onClick={this.showAddModal}>添加学生</Button>
           <Button type="primary" className='top-button' ><a href={config.api + '/Practice/export?year_id=' + this.state.selectedYear}>统计结果导出</a></Button>
           <Button type="primary" className='top-button' ><Link to='/graduateYearManage'>年度管理</Link></Button>
-          <Button type="primary" className='top-button' >模板管理</Button>
+          {/*<Button type="primary" className='top-button' >模板管理</Button>*/}
           <Search
             placeholder="搜索卡号、姓名、部门"
             style={{ width: 200 ,float:"right",marginRight:20}}
@@ -282,7 +326,29 @@ class GraduateList extends React.Component {
         >
           <Input type="textarea" rows={10} ref='inputStudents'/>
           <Button type="primary" onClick={this.addStudent} className='add-button'>添加</Button>
-        </Modal>     
+        </Modal> 
+        <Modal
+          visible={this.state.detailVisible}
+          title="详细信息"
+          onOk={this.handleDetailOk}
+          onCancel={this.handleDetailCancel}
+          footer={[
+            <Button key="back" type="primary" size="large" onClick={this.handleDetailOk}>
+              OK
+            </Button>,
+          ]}
+        >
+          <div className="detail">
+            <p><span className='detail-title'>教师名称：</span>{this.state.detail.name}</p>
+            <p><span className='detail-title'>课题名称：</span>{this.state.detail.project_name}</p>
+            <p><span className='detail-title'>课题来源：</span>{this.state.detail.project_from}</p>
+            <p><span className='detail-title'>研究方向：</span>{this.state.detail.project_direction}</p>
+            <p><span className='detail-title'>可带学生人数：</span>{this.state.detail.number}</p>
+            <p><span className='detail-title'>课题背景：</span>{this.state.detail.project_background}</p>
+            <p><span className='detail-title'>技能要求：</span>{this.state.detail.demand}</p>
+            <p><span className='detail-title'>备注：</span>{this.state.detail.other}</p>
+          </div>
+        </Modal>    
       </div>
     );
   }
