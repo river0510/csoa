@@ -223,6 +223,9 @@ class JobChose extends React.Component {
 			dataIndex: 'state',
 			key: 'state',
 			width: 80,
+			render: (text,record) => {
+				return record.state == 1 ? "锁定" : "未锁定"
+			}
 		}, {
 			title: '操作',
 			key: 'action',

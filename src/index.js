@@ -24,6 +24,15 @@ import JobChose from './pages/JobChose'
 import GraduateManage from './pages/GraduateManage'
 import GraduateYearManage from './pages/GraduateYearManage'
 import ProjectCreate from './pages/ProjectCreate'
+import ProjectConfirm from './pages/ProjectConfirm'
+import ConfirmStudent from './pages/ConfirmStudent'
+import ProjectChose from './pages/ProjectChose'
+
+var Promise = require('es6-promise').Promise;
+import 'fetch-detector'
+import 'fetch-ie8'
+require('es6-promise').polyfill();
+
 // Render the main component into the dom
 ReactDOM.render((
 	<Router history={hashHistory}>
@@ -42,6 +51,9 @@ ReactDOM.render((
 			<Route path='/graduateManage' component={GraduateManage}/>
 			<Route path='/graduateYearManage' component={GraduateYearManage}/>
 			<Route path='/projectCreate' component={ProjectCreate}/>
+			<Route path='/projectConfirm' component={ProjectConfirm}/>
+			<Route path='/confirmStudent/:project_id' component={ConfirmStudent}/>
+			<Route path='/projectChose' component={ProjectChose}/>
 		</Route>
 		<Route path='/login' component={Login}/>
 		<Route path='/signup' component={Signup}/>

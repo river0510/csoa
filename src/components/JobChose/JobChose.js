@@ -258,7 +258,7 @@ class JobChose extends React.Component {
 			key: 'action',
 			width: 100,
 			render: (text, record) => {
-				if (record.is_chosed) {
+				if (record.is_chosed == 1) {
 					return (
 						<span>
 					        <a href="#" onClick={this.showDetail.bind(this,record.id)}>明细</a>

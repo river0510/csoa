@@ -210,6 +210,7 @@ class JobList extends React.Component {
 					search: data.job
 				})
 			} else {
+				message.error(data.message);
 				this.setState({
 					jobData: [],
 					search: []
