@@ -6,7 +6,8 @@ import {
   message,
   Upload,
   Icon,
-  Input
+  Input,
+  Radio
 } from 'antd';
 import {
   Link
@@ -16,6 +17,7 @@ import './TeacherList.scss'
 
 const confirm = Modal.confirm;
 const Search = Input.Search;
+const RadioGroup = Radio.Group;
 
 
 class TeacherList extends React.Component {
@@ -25,11 +27,14 @@ class TeacherList extends React.Component {
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
       detailVisible: false,
+      roleVisible: false,
       importVisible: false,
+      radioValue: 0,
       data: [], //显示的数据
       search: [], //提供给搜索的所有数据
       detail: {},
       fileList: [],
+      selectedId: null,
     };
   }
 
@@ -240,6 +245,43 @@ class TeacherList extends React.Component {
     });
   }
 
+  //单个重置密码确定对话框
+  showResetConfirm(id, e) {
+    e.preventDefault();
+    let getTeacher = this.getTeacher;
+
+    function resetTeacher(id) {
+      fetch(config.api + '/User/resetTeacher?id=' + id, {
+        method: 'get',
+        mode: 'cors',
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }).then((res) => {
+        return res.json();
+      }).then((data) => {
+        if (data.status == 200) {
+          message.success(data.message);
+          getTeacher();
+        } else {
+          message.error(data.message);
+        }
+      }).catch(err => console.log(err))
+    }
+
+    confirm({
+      title: '确定要重置密码吗？',
+      content: '初始密码为123456',
+      onOk() {
+        resetTeacher(id);
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
   //显示明细modal
   showDetail(id, e) {
     e.preventDefault();
@@ -281,13 +323,58 @@ class TeacherList extends React.Component {
     })
   }
 
+  //显示权限修改modal
+  showRole(id, e) {
+    e.preventDefault();
+    this.setState({
+      selectedId: id,
+      roleVisible: true
+    })
+  }
+  handleRoleOk = () => {
+    let {selectedId, radioValue} = this.state;
+    fetch(config.api + '/User/modifyTeacherRole?id=' + selectedId + '&role_id=' + radioValue, {
+      method: 'get',
+      mode: 'cors',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      if (data.status == 200) {
+        message.success(data.message);
+        this.setState({
+          roleVisible: false
+        })
+      } else {
+        message.error(data.message);
+      }
+    }).catch(err => console.log(err))
+
+    
+  }
+  handleRoleCancel = () => {
+    this.setState({
+      roleVisible: false
+    })
+  }
+  
+  //radio 
+  onRadioChange = (e) => {
+    console.log(e.target.value);
+    this.setState({
+      radioValue: e.target.value,
+    });
+  }
   //搜索
   search = (value) => {
     let data = this.state.search;
     let res = [];
     //卡号、姓名查询
     for (let i = 0; i < data.length; i++) {
-      if (data[i].card_number == value || data[i].name == value || (data[i].department.indexOf(value) != -1)) {
+      if (data[i].card_number == value || data[i].name == value || (data[i].department && data[i].department.indexOf(value) != -1)) {
         res.push(data[i]);
       }
     }
@@ -405,6 +492,10 @@ class TeacherList extends React.Component {
           <Link to={'/userModify/' + record.role_id + '/' + record.card_number}>修改</Link>
           <span className="ant-divider" />
           <a href="#" onClick={this.showDeleteConfirm.bind(this,record.id)}>删除</a>
+          <span className="ant-divider" />
+          <a href="#" onClick={this.showResetConfirm.bind(this,record.id)}>重置密码</a>
+          <span className="ant-divider" />
+          <a href="#" onClick={this.showRole.bind(this,record.id)}>设置权限</a>
         </span>
       ),
     }];
@@ -488,7 +579,20 @@ class TeacherList extends React.Component {
               <Icon type="upload" /> 选择文件
             </Button>
           </Upload>
-        </Modal>        
+        </Modal>
+
+        <Modal
+          visible={this.state.roleVisible}
+          title="修改权限"
+          onOk={this.handleRoleOk}
+          onCancel={this.handleRoleCancel}
+        >
+          <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
+            <Radio value={1}>管理员</Radio>
+            <Radio value={2}>教务</Radio>
+            <Radio value={3}>教学</Radio>
+          </RadioGroup>
+        </Modal>      
       </div>
     );
   }

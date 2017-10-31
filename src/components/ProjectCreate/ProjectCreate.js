@@ -137,6 +137,7 @@ class JobChose extends React.Component {
 		this.setState({
 			modifyVisible: false
 		})
+
 	}
 	modifyFormColse = () => {
 		return this.modifyOk();
@@ -209,6 +210,10 @@ class JobChose extends React.Component {
 			dataIndex: 'project_direction',
 			key: 'project_direction',
 		}, {
+			title: '负责老师',
+			dataIndex: 'teacher_name',
+			key: 'teacher_name',
+		},{
 			title: '可带学生人数',
 			dataIndex: 'number',
 			key: 'number',

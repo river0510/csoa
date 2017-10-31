@@ -265,7 +265,7 @@ class ProjectChose extends React.Component {
         <div style={{ marginBottom: 16 }}>
           <Button type="primary" className='top-button' onClick={this.showDeleteApplyConfirm}>撤销报名</Button>
           <span>截止时间：{this.state.deadline}</span>
-          <span style={{marginLeft:20,color:'#2f7ae0',fontSize:15}}>只能选择一个题目，要重选先撤销！有疑问请找胡老师 26534325</span>
+          <span style={{marginLeft:20,color:'#2f7ae0',fontSize:15}}>请在报名后抓紧时间联系老师，光在网站上等是没用的！</span>
           <Search
             placeholder="搜索课题"
             style={{ width: 150 ,float:"right",marginRight:20}}

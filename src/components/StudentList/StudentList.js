@@ -6,7 +6,8 @@ import {
   message,
   Upload,
   Icon,
-  Input
+  Input,
+  Radio
 } from 'antd';
 import {
   Link
@@ -239,6 +240,43 @@ class StudentList extends React.Component {
     });
   }
 
+  //单个重置密码确定对话框
+  showResetConfirm(id, e) {
+    e.preventDefault();
+    let getTeacher = this.getTeacher;
+
+    function resetTeacher(id) {
+      fetch(config.api + '/User/resetStudent?id=' + id, {
+        method: 'get',
+        mode: 'cors',
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }).then((res) => {
+        return res.json();
+      }).then((data) => {
+        if (data.status == 200) {
+          message.success(data.message);
+          getTeacher();
+        } else {
+          message.error(data.message);
+        }
+      }).catch(err => console.log(err))
+    }
+
+    confirm({
+      title: '确定要重置密码吗？',
+      content: '初始密码为123456',
+      onOk() {
+        resetTeacher(id);
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
   //显示明细modal
   showDetail(id, e) {
     e.preventDefault();
@@ -404,6 +442,8 @@ class StudentList extends React.Component {
           <Link to={'/userModify/' + record.role_id + '/' + record.card_number}>修改</Link>
           <span className="ant-divider" />
           <a href="#" onClick={this.showDeleteConfirm.bind(this,record.id)}>删除</a>
+          <span className="ant-divider" />
+          <a href="#" onClick={this.showResetConfirm.bind(this,record.id)}>重置密码</a>
         </span>
       ),
     }];

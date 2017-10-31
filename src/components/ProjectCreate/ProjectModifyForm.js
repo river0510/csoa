@@ -23,6 +23,7 @@ class ProjectModifyForm extends React.Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.props.form.validateFieldsAndScroll((err, values) => {
+			// console.log(values);
 			if (!err) {
 				let bodyquery =
 					'&id=' + this.props.data.id +
@@ -33,7 +34,7 @@ class ProjectModifyForm extends React.Component {
 					'&project_background=' + values.project_background +
 					'&project_work=' + values.project_work +
 					'&demand=' + values.demand +
-					'&other=' + values.other;
+					'&other=' + values.other || '';
 				console.log(bodyquery);
 				fetch(config.api + '/Graduate/projectModify', {
 					method: 'post',
@@ -48,12 +49,11 @@ class ProjectModifyForm extends React.Component {
 				}).then((data) => {
 					if (data.status == 200) {
 						message.success(data.message);
-						setTimeout(() => {
-							location.reload();
-						}, 300)
+						this.props.close();
 					} else {
 						message.error(data.message);
 					}
+					this.props.form.resetFields();
 				}).catch(err => console.log(err))
 			}
 		});
@@ -93,7 +93,7 @@ class ProjectModifyForm extends React.Component {
 				},
 			},
 		};
-		console.log(this.props.data)
+		// console.log(this.props.data)
 		return (
 		<Form onSubmit={this.handleSubmit}>
         <FormItem
