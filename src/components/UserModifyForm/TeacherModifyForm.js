@@ -43,6 +43,7 @@ class TeacherModifyForm extends React.Component {
           method: 'post',
           mode: 'cors',
           body: bodyquery,
+          credentials: "include",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
@@ -51,8 +52,9 @@ class TeacherModifyForm extends React.Component {
         }).then((data) => {
           if (data.status == 200) {
             message.success(data.message);
-            window.history.back();
-            location.reload();
+            setTimeout(()=>{
+              window.history.back();
+            },500)
           } else {
             message.error(data.message);
           }
@@ -126,7 +128,7 @@ class TeacherModifyForm extends React.Component {
           label="办公室"
         >
           {getFieldDecorator('office', {
-            rules: [{ required: true, message: '请输入你的办公地址' }],
+            rules: [{ required: false, message: '请输入你的办公地址' }],
             initialValue: this.state.data.office
           })(
             <Input />
@@ -137,7 +139,7 @@ class TeacherModifyForm extends React.Component {
           label="办公电话"
         >
           {getFieldDecorator('telephone', {
-            rules: [{ required: true, message: '请输入你的办公电话' }],
+            rules: [{ required: false, message: '请输入你的办公电话' }],
             initialValue: this.state.data.telephone
           })(
             <Input />
@@ -148,7 +150,7 @@ class TeacherModifyForm extends React.Component {
           label="所属部门"
         >
           {getFieldDecorator('department', {
-            rules: [{ required: true, message: '请输入你的部门' }],
+            rules: [{ required: false, message: '请输入你的部门' }],
             initialValue: this.state.data.department
           })(
             <Input />
@@ -159,7 +161,7 @@ class TeacherModifyForm extends React.Component {
           label="手机"
         >
           {getFieldDecorator('phone', {
-            rules: [{ required: true, message: '请输入你的手机号' }],
+            rules: [{ required: false, message: '请输入你的手机号' }],
             initialValue: this.state.data.phone
           })(
             <Input />
@@ -170,7 +172,7 @@ class TeacherModifyForm extends React.Component {
           label="短号"
         >
           {getFieldDecorator('short_phone', {
-            rules: [{ required: true, message: '请输入你的短号，没有则填写‘无’' }],
+            rules: [{ required: false, message: '请输入你的短号，没有则填写‘无’' }],
             initialValue: this.state.data.short_phone
           })(
             <Input />
@@ -184,7 +186,7 @@ class TeacherModifyForm extends React.Component {
             rules: [{
               type: 'email', message: '请输入正确的邮箱',
             }, {
-              required: true, message: '请输入你的邮箱',
+              required: false, message: '请输入你的邮箱',
             }],
             initialValue: this.state.data.email
           })(
@@ -196,7 +198,7 @@ class TeacherModifyForm extends React.Component {
           label="QQ"
         >
           {getFieldDecorator('qq', {
-            rules: [{ required: true, message: '请输入你的QQ' }],
+            rules: [{ required: false, message: '请输入你的QQ' }],
             initialValue: this.state.data.qq
           })(
             <Input />
@@ -207,7 +209,7 @@ class TeacherModifyForm extends React.Component {
           label="微信"
         >
           {getFieldDecorator('wechat', {
-            rules: [{ required: true, message: '请输入你的微信' }],
+            rules: [{ required: false, message: '请输入你的微信' }],
             initialValue: this.state.data.wechat
           })(
             <Input />

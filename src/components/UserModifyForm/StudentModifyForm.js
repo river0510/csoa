@@ -53,8 +53,9 @@ class StudentModifyForm extends React.Component {
         }).then((data) => {
           if (data.status == 200) {
             message.success(data.message);
-            window.history.back();
-            location.reload();
+            setTimeout(()=>{
+              window.history.back();
+            },500)
           } else {
             message.error(data.message);
           }
