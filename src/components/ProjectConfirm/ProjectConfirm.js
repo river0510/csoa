@@ -40,7 +40,7 @@ class ProjectConfirm extends React.Component {
 		let _self = this;
 
 		function deleteJob(id) {
-			fetch(config.api + '/Practice/deleteJob?id=' + id, {
+			fetch(config.api + '/Graduate/deleteJob?id=' + id, {
 				method: 'get',
 				mode: 'cors',
 				credentials: "include",

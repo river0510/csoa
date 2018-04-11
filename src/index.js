@@ -21,12 +21,22 @@ import JobManage from './pages/JobManage'
 import DistributeStudent from './pages/DistributeStudent'
 import NotComplete from './pages/NotComplete'
 import JobChose from './pages/JobChose'
+
+//毕设选择
 import GraduateManage from './pages/GraduateManage'
 import GraduateYearManage from './pages/GraduateYearManage'
 import ProjectCreate from './pages/ProjectCreate'
 import ProjectConfirm from './pages/ProjectConfirm'
 import ConfirmStudent from './pages/ConfirmStudent'
 import ProjectChose from './pages/ProjectChose'
+
+//学生入所
+import ResearchManage from './pages/ResearchManage'
+import ResearchYearManage from './pages/ResearchYearManage'
+import ResearchCreate from './pages/ResearchCreate'
+import ResearchConfirm from './pages/ResearchConfirm'
+import ConfirmResearchStudent from './pages/ConfirmResearchStudent'
+import ResearchChose from './pages/ResearchChose'
 
 var Promise = require('es6-promise').Promise;
 import 'fetch-detector'
@@ -54,6 +64,13 @@ ReactDOM.render((
 			<Route path='/projectConfirm' component={ProjectConfirm}/>
 			<Route path='/confirmStudent/:project_id' component={ConfirmStudent}/>
 			<Route path='/projectChose' component={ProjectChose}/>
+
+			<Route path='/researchManage' component={ResearchManage}/>
+			<Route path='/researchYearManage' component={ResearchYearManage}/>
+			<Route path='/researchCreate' component={ResearchCreate}/>
+			<Route path='/researchConfirm' component={ResearchConfirm}/>
+			<Route path='/confirmResearchStudent/:project_id' component={ConfirmResearchStudent}/>
+			<Route path='/researchChose' component={ResearchChose}/>
 		</Route>
 		<Route path='/login' component={Login}/>
 		<Route path='/signup' component={Signup}/>
